@@ -17,3 +17,5 @@ README.html
 .idea
 *.iml
 *.properties
+*.pkc
+*.idx
