@@ -1,13 +1,14 @@
 package com.jackbracey.recipe.Domain;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.jackbracey.recipe.Domain.Ingredient.IngredientToRecipe;
+import com.jackbracey.recipe.POJOs.RecipeDataSources;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "recipe")
-@NoArgsConstructor
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,6 +17,50 @@ public class Recipe {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "url", nullable = false)
+    private String url;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "recipe_data_source", nullable = false)
+    private RecipeDataSources recipeDataSource;
+
+    @OneToMany(mappedBy = "recipe")
+    private List<IngredientToRecipe> ingredientToRecipe = new ArrayList<>();
+
+    public List<IngredientToRecipe> getIngredientToRecipe() {
+        return ingredientToRecipe;
+    }
+
+    public void setIngredientToRecipe(List<IngredientToRecipe> ingredientToRecipe) {
+        this.ingredientToRecipe = ingredientToRecipe;
+    }
+
+
+    public Recipe(String name, String url, RecipeDataSources recipeDataSource) {
+        this.name = name;
+        this.url = url;
+        this.recipeDataSource = recipeDataSource;
+    }
+
+    public Recipe() {
+    }
+
+    public RecipeDataSources getRecipeDataSource() {
+        return recipeDataSource;
+    }
+
+    public void setRecipeDataSource(RecipeDataSources recipeDataSource) {
+        this.recipeDataSource = recipeDataSource;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getName() {
         return name;

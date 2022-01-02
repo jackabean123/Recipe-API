@@ -1,6 +1,8 @@
 package com.jackbracey.recipe.Rest;
 
 import com.jackbracey.recipe.Domain.Recipe;
+import com.jackbracey.recipe.POJOs.RecipeDataSources;
+import com.jackbracey.recipe.Scrapers.BBCGoodFood;
 import com.jackbracey.recipe.Service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/recipes")
@@ -30,6 +34,13 @@ public class RecipeController {
         recipe.setName("Test");
         recipeService.createRecipe(recipe);
         return false;
+    }
+
+    @GetMapping("/scrape")
+    private void scrape() {
+        List<String> scrapedUrls = recipeService.GetUrls(RecipeDataSources.BBCGoodFood);
+        BBCGoodFood bbcGoodFood = new BBCGoodFood(scrapedUrls, recipeService);
+        bbcGoodFood.run();
     }
 
 }
